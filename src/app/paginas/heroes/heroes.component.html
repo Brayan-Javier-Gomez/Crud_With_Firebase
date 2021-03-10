@@ -1,3 +1,6 @@
+//Boostrap
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <br>
 <h1 style="font-family: Helvetica;">
     Listado de heroes.
@@ -5,7 +8,7 @@
 <hr>
 
 <div class="row">
-    <div class="col text-right">
+    <div class="col text-center">
         <button routerLink="/heroe/nuevo" class="btn btn-primary">
             <i class="fa fa-plus"></i>
             Agregar
@@ -13,7 +16,7 @@
     </div>
 </div>
 
-<table class="table table-striped table-dark m-3">
+<table class="table table-striped table-dark m-3 animated fadeIn faster" *ngIf="!cargando && heroes.length > 0">
     <thead>
         <tr>
             <th scope="col">#</th>
@@ -24,12 +27,26 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
+        <tr *ngFor="let heroe of heroes; let i = index">
+            <th scope="row">{{i + 1}}</th>
+            <td>{{heroe.nombre}}</td>
+            <td>{{heroe.poder}}</td>
+            <td>
+
+                <label *ngIf="heroe.vivo" class="badge badge-success">Vivo</label>
+                <label *ngIf="!heroe.vivo" class="badge badge-danger">Muerto</label>
+
+            </td>
+            <td>
+                <button class="btn btn-info mr-1 " [routerLink]="['/heroe', heroe.id]">
+                    <i class="fa fa-pen"></i>
+                    
+                </button>
+
+                <button class="btn btn-info mr-1" (click)="borrar(heroe, i)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
         </tr>
 
     </tbody>
@@ -37,7 +54,7 @@
 
 <!-- LOADING -->
 
-<div class="alert alert-info text-center mt-3">
+<div *ngIf="cargando" class="alert alert-info text-center mt-3 animated fadeIn faster">
     <h4 class="alert-heading">Cargando</h4>
     <p>
         <i class="fa fa-sync fa-spin fa-2x"></i>
@@ -48,7 +65,7 @@
     </p>
 </div>
 
-<div class="alert alert-warning text-center mt-3">
+<div class="alert alert-warning text-center mt-3 animated fadeIn faster" *ngIf="!cargando && heroes.length === 0">
     <h4 class="alert-heading">No se encontraron registros</h4>
     <p>
         <i class="fa fa-exclamation fa-2x"></i>
